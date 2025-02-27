@@ -21,19 +21,43 @@ export default function AddEvent() {
 
     let gambarUrl = '';
     if (gambar) {
-      const fileExt = gambar.name.split('.').pop();
-      const fileName = `${Date.now()}.${fileExt}`;
-      const { data, error } = await supabase.storage.from('events-images').upload(fileName, gambar);
-      if (error) {
-        alert('Error saat upload gambar: ' + error.message);
+      try {
+        const formData = new FormData();
+        formData.append('file', gambar);
+  
+        const response = await fetch(`http://${window.location.host}/api/img_to_webp`, {
+          method: 'POST',
+          body: formData,
+        });
+  
+        if (!response.ok) {
+          throw new Error(`Failed to convert image to WebP: ${response.statusText}`);
+        }
+  
+        const webpBlob = await response.blob();
+        const webpFileName = `${Date.now()}.webp`;
+  
+        // Upload the WebP image to Supabase
+        const { data, error } = await supabase.storage
+          .from('events-images')
+          .upload(webpFileName, webpBlob, {
+            contentType: 'image/webp',
+          });
+  
+        if (error) {
+          throw new Error('Error saat upload gambar WebP: ' + error.message);
+        }
+  
+        gambarUrl = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/events-images/${webpFileName}`;
+      } catch (error: any) {
+        alert('Error: ' + error.message);
         setLoading(false);
         return;
       }
-      gambarUrl = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/events-images/${fileName}`;
     }
 
     const { error } = await supabase.from('events').insert([
-      { judul, tanggal_event: tanggal, deskripsi, jam_mulai: jamMulai, jam_selesai: jamSelesai, lokasi, kota, provinsi, gambar: gambarUrl },
+      { judul, tanggal, deskripsi, jam_mulai: jamMulai, jam_selesai: jamSelesai, lokasi, kota, provinsi, gambar: gambarUrl },
     ]);
 
     if (error) {
