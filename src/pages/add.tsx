@@ -29,7 +29,7 @@ export default function AddEvent() {
         setLoading(false);
         return;
       }
-      gambarUrl = `https://kowjfwdiwxmtpyesqqav.supabase.co/storage/v1/object/public/events-images/${fileName}`;
+      gambarUrl = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/events-images/${fileName}`;
     }
 
     const { error } = await supabase.from('events').insert([
