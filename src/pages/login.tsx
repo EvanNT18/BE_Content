@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { supabase } from "@/lib/SupabaseClient";
 import { useRouter } from "next/router";
+import bcrypt from "bcryptjs"; // Import bcrypt untuk hash password
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -12,26 +13,39 @@ export default function LoginPage() {
     e.preventDefault();
     setLoading(true);
 
-    const { data, error } = await supabase
-    .from('users')
-    .select('*')
-    .eq('email', email)
-    .single();
-      
+    // Ambil user berdasarkan email
+    const { data: user, error } = await supabase
+      .from("users")
+      .select("id, email, password") 
+      .eq("email", email)
+      .single();
 
     setLoading(false);
-    if (error) {
-      alert("Login gagal: " + error.message);
-    } else {
-      router.push("/dashboard"); // Redirect ke dashboard jika login sukses
+
+    if (error || !user) {
+      alert("Login gagal: Email tidak ditemukan.");
+      return;
     }
+
+  
+    const isValidPassword = bcrypt.compareSync(password, user.password);
+    if (!isValidPassword) {
+      alert("Login gagal: Password salah.");
+      return;
+    }
+
+  
+    localStorage.setItem("user", JSON.stringify(user));
+
+    alert("Login berhasil!");
+    router.push("/dashboard");
   };
 
   return (
-    <div className="flex justify-center items-center h-screen bg-black">
-      <div className="bg-black p-6 rounded-lg shadow-lg w-96">
-        <h2 className="text-2xl font-bold text-center mb-4">Login</h2>
-        <form onSubmit={handleLogin} className="space-y-4 text-black">
+    <div className="flex justify-center items-center h-screen bg-gray-100">
+      <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+        <h2 className="text-2xl font-bold text-center mb-4 text-black">Login</h2>
+        <form onSubmit={handleLogin} className="space-y-4">
           <input
             type="email"
             placeholder="Email"

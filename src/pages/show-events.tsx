@@ -11,7 +11,7 @@ interface Event {
   jam_selesai: string;
   lokasi: string;
   kota: string;
-  negara: string;
+  provinsi: string;
 }
 
 export default function EventsPage() {
@@ -52,7 +52,7 @@ export default function EventsPage() {
               <p className="text-sm">{event.deskripsi}</p>
               <p className="text-sm text-gray-500">🗓 {event.tanggal_event}</p>
               <p className="text-sm text-gray-500">⏰ {event.jam_mulai} - {event.jam_selesai}</p>
-              <p className="text-sm text-gray-500">📍 {event.lokasi}, {event.kota}, {event.negara}</p>
+              <p className="text-sm text-gray-500">📍 {event.lokasi}, {event.kota}, {event.provinsi}</p>
             </div>
           ))}
         </div>

@@ -12,7 +12,7 @@ interface Event {
   jam_selesai: string;
   lokasi: string;
   kota: string;
-  negara: string;
+  provinsi: string;
 }
 
 export default function EditEventPage() {
@@ -55,7 +55,7 @@ export default function EditEventPage() {
       jam_selesai: event.jam_selesai,
       lokasi: event.lokasi,
       kota: event.kota,
-      negara: event.negara,
+      provinsi: event.provinsi,
     });
 
 
@@ -71,7 +71,7 @@ export default function EditEventPage() {
         jam_selesai: event.jam_selesai,
         lokasi: event.lokasi,
         kota: event.kota,
-        negara: event.negara,
+        provinsi: event.provinsi,
       })
       .eq("id", String(event.id))
       .select(); // Ambil data setelah update
@@ -161,10 +161,10 @@ export default function EditEventPage() {
         />
         <input
           type="text"
-          name="negara"
-          value={event.negara}
+          name="provinsi"
+          value={event.provinsi}
           onChange={handleChange}
-          placeholder="Negara"
+          placeholder="provinsi"
           className="w-full p-2 border rounded bg-black text-white"
           required
         />

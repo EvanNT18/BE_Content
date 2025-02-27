@@ -3,14 +3,14 @@ import { supabase } from '@/lib/SupabaseClient';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === 'POST') {
-        const { tanggal_event, gambar, judul, deskripsi, jam_mulai, jam_selesai, lokasi, kota, negara } = req.body;
+        const { tanggal_event, gambar, judul, deskripsi, jam_mulai, jam_selesai, lokasi, kota, provinsi } = req.body;
 
-        if (!tanggal_event || !judul || !jam_mulai || !jam_selesai || !lokasi || !kota || !negara) {
+        if (!tanggal_event || !judul || !jam_mulai || !jam_selesai || !lokasi || !kota || !provinsi) {
             return res.status(400).json({ error: 'Semua field wajib diisi' });
         }
 
         const { data, error } = await supabase.from('events').insert([
-            { tanggal_event, gambar, judul, deskripsi, jam_mulai, jam_selesai, lokasi, kota, negara }
+            { tanggal_event, gambar, judul, deskripsi, jam_mulai, jam_selesai, lokasi, kota, provinsi }
         ]);
 
         if (error) return res.status(500).json({ error: error.message });

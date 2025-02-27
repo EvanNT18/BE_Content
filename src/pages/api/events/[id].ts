@@ -9,11 +9,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     if (req.method === 'PUT') {
-        const { tanggal_event, gambar, judul, deskripsi, jam_mulai, jam_selesai, lokasi, kota, negara } = req.body;
+        const { tanggal_event, gambar, judul, deskripsi, jam_mulai, jam_selesai, lokasi, kota, provinsi } = req.body;
 
         const { data, error } = await supabase
             .from('events')
-            .update({ tanggal_event, gambar, judul, deskripsi, jam_mulai, jam_selesai, lokasi, kota, negara })
+            .update({ tanggal_event, gambar, judul, deskripsi, jam_mulai, jam_selesai, lokasi, kota, provinsi })
             .eq('id', id);
 
         if (error) return res.status(500).json({ error: error.message });

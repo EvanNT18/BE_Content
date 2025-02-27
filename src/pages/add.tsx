@@ -10,7 +10,7 @@ export default function AddEvent() {
   const [jamSelesai, setJamSelesai] = useState('');
   const [lokasi, setLokasi] = useState('');
   const [kota, setKota] = useState('');
-  const [negara, setNegara] = useState('');
+  const [provinsi, setprovinsi] = useState('');
   const [gambar, setGambar] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
@@ -33,7 +33,7 @@ export default function AddEvent() {
     }
 
     const { error } = await supabase.from('events').insert([
-      { judul, tanggal_event: tanggal, deskripsi, jam_mulai: jamMulai, jam_selesai: jamSelesai, lokasi, kota, negara, gambar: gambarUrl },
+      { judul, tanggal_event: tanggal, deskripsi, jam_mulai: jamMulai, jam_selesai: jamSelesai, lokasi, kota, provinsi, gambar: gambarUrl },
     ]);
 
     if (error) {
@@ -56,7 +56,7 @@ export default function AddEvent() {
         <input type="time" value={jamSelesai} onChange={(e) => setJamSelesai(e.target.value)} className="border p-2 w-full bg-black" required />
         <input type="text" placeholder="Lokasi" value={lokasi} onChange={(e) => setLokasi(e.target.value)} className="border p-2 w-full bg-black" required />
         <input type="text" placeholder="Kota" value={kota} onChange={(e) => setKota(e.target.value)} className="border p-2 w-full bg-black" required />
-        <input type="text" placeholder="Negara" value={negara} onChange={(e) => setNegara(e.target.value)} className="border p-2 w-full bg-black" required />
+        <input type="text" placeholder="provinsi" value={provinsi} onChange={(e) => setprovinsi(e.target.value)} className="border p-2 w-full bg-black" required />
         <input type="file" onChange={(e) => setGambar(e.target.files?.[0] || null)} className="border p-2 w-full" accept="image/*" />
 
         <button type="submit" disabled={loading} className="bg-blue-500 text-white px-4 py-2 w-full">
